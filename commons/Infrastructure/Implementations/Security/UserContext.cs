@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
-using Authentications.Application.Abstractions.Security;
+using Application.Abstractions.Security;
 using Microsoft.AspNetCore.Http;
 
-namespace Authentications.Infrastructure.Implementations.Security.Authentication;
+namespace Infrastructure.Implementations.Security;
 
 public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {

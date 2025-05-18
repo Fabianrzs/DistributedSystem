@@ -1,4 +1,5 @@
 ﻿global using Application.Abstractions.Messaging;
+global using Application.Abstractions.Security;
 global using Authentications.Application.Abstractions.Security;
 global using Authentications.Domain.Modules.Entities;
 global using Authentications.Domain.Modules.Errors;
@@ -6,5 +7,3 @@ global using Authentications.Domain.Modules.Repositories;
 global using Domain.Abstractions.Errors;
 global using FluentValidation;
 global using Mapster;
-
-

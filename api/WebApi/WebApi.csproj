@@ -22,4 +22,9 @@
     <ProjectReference Include="..\..\modules\Reports\Reports.Infrastructure\Reports.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Endpoints\Notifications\" />
+    <Folder Include="Endpoints\Reports\" />
+  </ItemGroup>
+
 </Project>

@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 namespace Application.Abstractions.Behaviors;
 
-internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
+public sealed class ValidationPipelineBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class

@@ -24,13 +24,14 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
 
         user.Roles.ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role)));
 
-        int expirationInMinutes = configuration.GetValue<int>("SECURITY-JWT-ACCESS-EXPIRATION-IN-MINUTES");
-        string secretKey = configuration["SECURITY-JWT-SECRET-ACCESS"]
-            ?? throw new ArgumentException("SECURITY-JWT-SECRET-ACCESS is not configured.");
-
+        int expirationInMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpiration");
+        string secretKey = configuration["Jwt:AccessSecret"]!;
         return GenerateToken(claims, expirationInMinutes, secretKey);
     }
 
+    /// <summary>
+    /// Genera un Refresh Token que solo contiene el SessionId y UserId.
+    /// </summary>
     public string GenerateRefreshToken(Guid sessionId, Guid userId)
     {
         var claims = new List<Claim>
@@ -39,32 +40,26 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-
-        int expirationInMinutes = configuration.GetValue<int>("SECURITY-JWT-REFRESH-EXPIRATION-IN-MINUTES");
-        string secretKey = configuration["SECURITY-JWT-SECRET-REFRESH"]
-            ?? throw new ArgumentException("SECURITY-JWT-SECRET-REFRESH is not configured.");
-
+        int expirationInMinutes = configuration.GetValue<int>("Jwt:RefreshTokenExpiration");
+        string secretKey = configuration["Jwt:RefreshSecret"]!;
         return GenerateToken(claims, expirationInMinutes, secretKey);
     }
 
+    /// <summary>
+    /// Método reutilizable para generar tokens.
+    /// </summary>
     private string GenerateToken(List<Claim> claims, int expirationInMinutes, string secretKey)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        string issuer = configuration["SECURITY-JWT-ISSUER"]
-            ?? throw new ArgumentException("SECURITY-JWT-ISSUER is not configured.");
-
-        string audience = configuration["SECURITY-JWT-AUDIENCE"]
-            ?? throw new ArgumentException("SECURITY-JWT-AUDIENCE is not configured.");
-
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime  .UtcNow.AddMinutes(expirationInMinutes),
+            Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes),
             SigningCredentials = credentials,
-            Issuer = issuer,
-            Audience = audience
+            Issuer = configuration["Jwt:Issuer"],
+            Audience = configuration["Jwt:Audience"]
         };
 
         var handler = new JwtSecurityTokenHandler();

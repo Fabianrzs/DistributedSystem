@@ -1,4 +1,6 @@
 using Application;
+using Authentications.Application;
+using Authentications.Infrastructure;
 using Infrastructure;
 using WebApi;
 
@@ -10,10 +12,17 @@ IConfigurationManager configuration = builder.Configuration;
 
 services
     .AddInfrastructure(configuration)
-    .AddApplication()
-    .AddPresentation(configuration);
+    .AddInfrastructureAuth(configuration);
+
+services.AddApplication()
+    .AddApplicationAuth();
+
+services.AddPresentation(configuration);
+
 
 WebApplication app = builder.Build();
+
+app.UsePresentation(configuration);
 
 await app.RunAsync();
 public partial class Program;

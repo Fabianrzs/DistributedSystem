@@ -1,4 +1,5 @@
-﻿namespace Authentications.Application.Authentications.CheckSession;
+﻿
+namespace Authentications.Application.Authentications.CheckSession;
 
 internal sealed class CheckSessionCommandHandler(IAuthenticationRepository authRepository, IUserContext userContext)
     : ICommandHandler<CheckSessionCommand>

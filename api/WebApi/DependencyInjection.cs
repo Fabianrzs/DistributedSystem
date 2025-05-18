@@ -34,6 +34,7 @@ public static class DependencyInjection
         {
             app.MapOpenApi();
             app.UseSwaggerWithUi();
+            app.ApplyMigrations();
         }
 
         app.UseRequestContextLogging();

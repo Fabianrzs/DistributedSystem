@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Authentications.Infrastructure.Extensions;
 public static class ServicesExtension
 {
-    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddServicesAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         return services;

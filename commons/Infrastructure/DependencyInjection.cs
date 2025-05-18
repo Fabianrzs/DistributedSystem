@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddPersistence(configuration);
         services.AddRepositories(configuration);
+        services.AddAuthenticationUser();
         return services;
     }
 }

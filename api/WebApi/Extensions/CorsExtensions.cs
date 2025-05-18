@@ -1,4 +1,6 @@
-﻿namespace WebApi.Extensions;
+﻿using WebApi.Settings;
+
+namespace WebApi.Extensions;
 
 internal static class CorsExtensions
 {
@@ -6,24 +8,31 @@ internal static class CorsExtensions
 
     public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        string allowedOriginsValue = configuration["CORS-SETTINGS-ALLOWED-ORIGINS"]
-            ?? throw new ArgumentException("CORS-SETTINGS-ALLOWED-ORIGINS is not configured.");
+        CorsSettings? corsSettings = configuration.GetSection("CorsSettings").Get<CorsSettings>();
 
-        string allowedMethodsValue = configuration["CORS-SETTINGS-ALLOWED-METHODS"]
-            ?? throw new ArgumentException("CORS-SETTINGS-ALLOWED-METHODS is not configured.");
+        if (corsSettings != null && corsSettings.EnableCors)
+        {
+            services.AddCors(options => options.AddPolicy(CorsPolicyName, builder =>
+            {
+                if (corsSettings.AllowAllOrigins)
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                }
+                else
+                {
+                    builder.WithOrigins(corsSettings.AllowedOrigins ?? [])
+                           .WithMethods(corsSettings.AllowedMethods ?? [])
+                           .WithHeaders(corsSettings.AllowedHeaders ?? []);
 
-        string allowedHeadersValue = configuration["CORS-SETTINGS-ALLOWED-HEADERS"]
-            ?? throw new ArgumentException("CORS-SETTINGS-ALLOWED-HEADERS is not configured.");
-
-        string[] allowedOrigins = allowedOriginsValue.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        string[] allowedMethods = allowedMethodsValue.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        string[] allowedHeaders = allowedHeadersValue.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-        services.AddCors(options => options.AddPolicy(CorsPolicyName,
-            builder => builder.WithOrigins(allowedOrigins)
-                       .WithMethods(allowedMethods)
-                       .WithHeaders(allowedHeaders)
-                       .AllowCredentials()));
+                    if (corsSettings.AllowCredentials)
+                    {
+                        builder.AllowCredentials();
+                    }
+                }
+            }));
+        }
 
         return services;
     }

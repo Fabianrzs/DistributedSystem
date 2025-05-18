@@ -6,7 +6,7 @@ namespace Authentications.Infrastructure.Extensions;
 
 public static class RepositoriesExtension
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    public static IServiceCollection AddRepositoriesAuth(this IServiceCollection services)
     {
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
         return services;

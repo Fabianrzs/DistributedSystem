@@ -17,44 +17,41 @@ public static class SecurityExtension
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        string accessSecret = configuration["SECURITY-JWT-SECRET-ACCESS"]
-            ?? throw new ArgumentException("SECURITY-JWT-SECRET-ACCESS is not configured.");
+        string accessSecret = configuration["Jwt:AccessSecret"]!
+            ?? throw new ArgumentException("AccessSecret is not configured.");
 
-        string refreshSecret = configuration["SECURITY-JWT-SECRET-REFRESH"]
-            ?? throw new ArgumentException("SECURITY-JWT-SECRET-REFRESH is not configured.");
+        string refreshSecret = configuration["Jwt:RefreshSecret"]!
+            ?? throw new ArgumentException("RefreshSecret is not configured.");
 
-        string issuer = configuration["SECURITY-JWT-ISSUER"]
-            ?? throw new ArgumentException("SECURITY-JWT-ISSUER is not configured.");
+        string issuer = configuration["Jwt:Issuer"]
+            ?? throw new ArgumentException("Issuer is not configured.");
 
-        string audience = configuration["SECURITY-JWT-AUDIENCE"]
-            ?? throw new ArgumentException("SECURITY-JWT-AUDIENCE is not configured.");
-
+        string audience = configuration["Jwt:Audience"]
+            ?? throw new ArgumentException("Audience is not configured.");
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessSecret)),
-                    ValidIssuer = issuer,
-                    ValidAudience = audience,
-                    ClockSkew = TimeSpan.Zero
-                };
-            })
-            .AddJwtBearer("Refresh", options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(refreshSecret)),
-                    ValidIssuer = issuer,
-                    ValidAudience = audience,
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+           .AddJwtBearer(o =>
+           {
+               o.RequireHttpsMetadata = false;
+               o.TokenValidationParameters = new TokenValidationParameters
+               {
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessSecret)),
+                   ValidIssuer = issuer,
+                   ValidAudience = audience,
+                   ClockSkew = TimeSpan.Zero
+               };
+           }).AddJwtBearer("Refresh", options =>
+           {
+               options.RequireHttpsMetadata = false;
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(refreshSecret)),
+                   ValidIssuer = issuer,
+                   ValidAudience = audience,
+                   ClockSkew = TimeSpan.Zero
+               };
+           });
 
         services.AddHttpContextAccessor();
-        services.AddScoped<IUserContext, UserContext>();
         services.AddSingleton<ITokenProvider, TokenProvider>();
 
         return services;
