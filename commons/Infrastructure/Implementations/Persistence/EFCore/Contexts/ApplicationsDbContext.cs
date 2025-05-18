@@ -2,4 +2,4 @@
 
 namespace Infrastructure.Implementations.Persistence.EFCore.Contexts;
 
-public abstract class ApplicationsDbContext(DbContextOptions<ApplicationsDbContext> options) : DbContext(options) {  }
+public abstract class ApplicationsDbContext(DbContextOptions options) : DbContext(options) {  } 
