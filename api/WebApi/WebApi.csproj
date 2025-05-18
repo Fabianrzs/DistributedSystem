@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\Authentications\Authentications.Infrastructure\Authentications.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Notifications\Notifications.Infrastructure\Notifications.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Reports\Reports.Infrastructure\Reports.Infrastructure.csproj" />
   </ItemGroup>

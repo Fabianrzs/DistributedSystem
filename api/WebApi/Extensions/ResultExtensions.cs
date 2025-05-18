@@ -1,4 +1,4 @@
-﻿namespace TryAdminBack.Api.Extensions;
+﻿namespace WebApi.Extensions;
 
 public static class ResultExtensions
 {
