@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Authentications.Application;
+namespace Notifications.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationAuth(this IServiceCollection services)
+    public static IServiceCollection AddApplicationNotifi(this IServiceCollection services)
     {
 
         TypeAdapterConfig config = TypeAdapterConfig.GlobalSettings;
