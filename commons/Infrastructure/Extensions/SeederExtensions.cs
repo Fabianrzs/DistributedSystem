@@ -8,15 +8,16 @@ namespace Infrastructure.Extensions;
 
 public static class SeederExtensions
 {
-    public static async Task RunSeedersAsync(this IServiceProvider serviceProvider, List<ISeeder<ApplicationsDbContext>> seeders)
+    public static async Task RunSeedersAsync<TApplicationsDbContext>(this IServiceProvider serviceProvider, List<ISeeder<TApplicationsDbContext>> seeders) 
+        where TApplicationsDbContext : ApplicationsDbContext
     {
         using IServiceScope scope = serviceProvider.CreateScope();
-        ApplicationsDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationsDbContext>();
+        TApplicationsDbContext context = scope.ServiceProvider.GetRequiredService<TApplicationsDbContext>();
 
         await using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            var seederManager = new SeederManager(seeders);
+            var seederManager = new SeederManager<TApplicationsDbContext>(seeders);
             await seederManager.SeedDatabase(context);
 
             await transaction.CommitAsync();

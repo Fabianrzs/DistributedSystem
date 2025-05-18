@@ -3,11 +3,11 @@ using TryAdminBack.Infrastructure.Implementations.Persistence.Seeders;
 
 namespace Infrastructure.Implementations.Persistence.Seeders;
 
-public class SeederManager(List<ISeeder<ApplicationsDbContext>> seeders)
+public class SeederManager<TApplicationsDbContext>(List<ISeeder<TApplicationsDbContext>> seeders) where TApplicationsDbContext : ApplicationsDbContext
 {
-    public async Task SeedDatabase(ApplicationsDbContext context)
+    public async Task SeedDatabase(TApplicationsDbContext context)
     {
-        foreach (ISeeder<ApplicationsDbContext> seeder in seeders)
+        foreach (ISeeder<TApplicationsDbContext> seeder in seeders)
         {
             await seeder.Seed(context);
             await context.SaveChangesAsync();
