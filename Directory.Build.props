@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <!-- Framework y configuraciones base -->
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+	<IsPackable>true</IsPackable>
+
+
+	<!-- Análisis de código -->
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	  
+  </PropertyGroup>
+
+  <!-- Incluir analizadores solo para proyectos que no sean .dcproj .config .props -->
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' 
+			 and '$(MSBuildProjectExtension)' != '.config'
+			 and '$(MSBuildProjectExtension)' != '.props'">
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

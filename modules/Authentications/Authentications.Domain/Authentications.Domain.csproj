@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Modules\Queries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\commons\Domain\Domain.csproj" />
+  </ItemGroup>
+</Project>

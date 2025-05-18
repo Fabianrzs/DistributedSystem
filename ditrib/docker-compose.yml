@@ -1,0 +1,74 @@
+version: '3.7'
+
+services:
+  
+  reservar-sql:
+    image: mcr.microsoft.com/mssql/server
+    hostname: reservar-server-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "!1PasswordBackEnd."
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    networks:
+      - reservar-network
+      
+  reservar-rabbit:
+      image: rabbitmq:3.8.34-management-alpine
+      hostname: reservar-server-rabbit
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      networks:
+        - reservar-network
+      volumes: 
+          - ./tools/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+          - ./tools/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+          - ./tools/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+  
+  #Services    
+
+  reservar-front:
+    image: fabianrzs/reservar-frontend:latest
+    hostname: frontend-host
+    ports:
+      - "4200:4200"
+    networks:
+     - reservar-network
+
+  reservar-gateway:
+      image: fabianrzs/reservar-apigateway:latest
+      hostname: gateway-host
+      ports:
+        - "5272:80"
+      networks:
+        - reservar-network
+      depends_on:
+        - reservar-authentication
+        
+  reservar-booking:
+    image: fabianrzs/reservar-booking:latest
+    hostname: booking-host
+    ports:
+     - "55394:80"
+    networks:
+    - reservar-network    
+    depends_on:
+      - reservar-sql
+
+  reservar-authentication:
+    image: fabianrzs/reservar-authentication:latest
+    hostname: authentication-host
+    ports:
+      - "55390:80"
+    networks:
+      - reservar-network
+    depends_on:
+      - reservar-sql
+
+networks:
+  reservar-network:
+    internal: true
+    external: true
+      

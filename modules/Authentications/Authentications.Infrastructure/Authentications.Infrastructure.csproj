@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\commons\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Authentications\Authentications.Application\Authentications.Application.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  reservar-sql:
+    image: mcr.microsoft.com/mssql/server
+    hostname: reservar-server-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "!1PasswordBackEnd."
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    networks:
+      - reservar-network
+  
+  #Services    
+
+  reservar-front:
+    image: reservar-front
+    ports:
+      - "3000:3000"
+    networks:
+     - reservar-network
+     
+  reservar-gateway:
+      image: reservar-gateway
+      hostname: gateway-host
+      ports:
+        - "5272:80"
+      networks:
+        - reservar-network
+      depends_on:
+        - reservar-authentication
+        
+  reservar-booking:
+    image: reservar-booking
+    hostname: booking-host
+    ports:
+     - "55394:80"
+    networks:
+    - reservar-network    
+
+  reservar-authentication:
+    image: reservar-authentication
+    hostname: authentication-host
+    ports:
+      - "55390:80"
+    networks:
+      - reservar-network
+    depends_on:
+      - reservar-sql
+
+networks:
+  reservar-network:
+    internal: true
+    external: true    
+      

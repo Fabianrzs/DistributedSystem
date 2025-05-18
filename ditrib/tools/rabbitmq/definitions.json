@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "name": "reservar_notification_user",
+      "password": "password_notificacion",
+      "tags": "management"
+    },
+    {
+      "name": "reservar_authentication_user",
+      "password": "password_autenticacion",
+      "tags": "management"
+    },
+    {
+      "name": "reservar_booking_user",
+      "password": "password_booking",
+      "tags": "management"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "reservar_notification_user",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "reservar_authentication_user",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "reservar_booking_user",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [
+    {"name":"request.queue","vhost":"/","durable":true,"auto_delete":false,"arguments":{}}
+  ],
+  "exchanges": [
+    {"name":"request.exchange","vhost":"/","type":"topic","durable":true,"auto_delete":false,"internal":false,"arguments":{}}
+  ],
+  "bindings": [
+    {"source":"request.exchange","vhost":"/","destination":"request.queue","destination_type":"queue","routing_key":"","arguments":{}}
+  ]
+}
