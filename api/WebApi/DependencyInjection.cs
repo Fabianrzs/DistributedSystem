@@ -9,6 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
     {
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        services.AddSettingExtensions(configuration);
         services.AddOpenApi();
         services.AddSwaggerGenWithAuth();
         services.AddEndpointsApiExplorer();

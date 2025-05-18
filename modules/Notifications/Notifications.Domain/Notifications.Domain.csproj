@@ -3,8 +3,10 @@
     <Folder Include="Attributes\" />
     <Folder Include="Extensions\" />
     <Folder Include="Modules\Errors\" />
-    <Folder Include="Modules\Repositories\" />
     <Folder Include="Modules\Queries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\commons\Domain\Domain.csproj" />

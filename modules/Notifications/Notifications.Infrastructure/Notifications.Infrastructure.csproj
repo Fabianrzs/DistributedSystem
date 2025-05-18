@@ -1,6 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\commons\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Reports\Reports.Application\Reports.Application.csproj" />
+    <ProjectReference Include="..\Notifications.Application\Notifications.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" />
+    <PackageReference Include="MimeKit" />
+    <PackageReference Include="MongoDB.Driver" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,8 @@ using Application;
 using Authentications.Application;
 using Authentications.Infrastructure;
 using Infrastructure;
+using Notifications.Application;
+using Notifications.Infrastructure;
 using WebApi;
 
 
@@ -12,10 +14,12 @@ IConfigurationManager configuration = builder.Configuration;
 
 services
     .AddInfrastructure(configuration)
-    .AddInfrastructureAuth(configuration);
+    .AddInfrastructureAuth(configuration)
+    .AddInfrastructureNotifi();
 
 services.AddApplication()
-    .AddApplicationAuth();
+    .AddApplicationAuth()
+    .AddApplicationNotifi();
 
 services.AddPresentation(configuration);
 
