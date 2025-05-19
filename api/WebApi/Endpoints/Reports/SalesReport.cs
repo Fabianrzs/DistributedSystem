@@ -19,7 +19,6 @@ public class SalesReport : IEndpoint
                 CustomResults.Problem);
         })
             .WithTags(Tags.Reports)
-            .DisableAntiforgery()
-            .RequireAuthorization();
+            .DisableAntiforgery();
     }
 }

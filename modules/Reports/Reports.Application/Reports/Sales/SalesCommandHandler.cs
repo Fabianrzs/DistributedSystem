@@ -1,18 +1,32 @@
 ﻿using MassTransit;
+using Reports.Application.Abstractions.Cache;
 using Reports.Application.Abstractions.FileProcessor;
 using Reports.Domain.Modules.Entities;
 using Reports.Domain.Modules.Repositories;
 
 namespace Reports.Application.Reports.Sales;
 
-internal sealed class SalesCommandHandler(ISalesRepository salesRepository, IFileProcessingService fileProcessing,IBus bus)
+internal sealed class SalesCommandHandler(ISalesRepository salesRepository, IFileProcessingService fileProcessing,
+    IBus bus,IDistributedCacheService cacheService)
     : ICommandHandler<SalesCommand, MemoryStream>
 {
     public async Task<Result<MemoryStream>> Handle(SalesCommand request, CancellationToken cancellationToken)
     {
+        string cacheKey = nameof(SalesReport);
+
+        byte[] cachedReport = await cacheService.GetAsync(cacheKey);
+
+        if (cachedReport != null)
+        {
+            return Result.Success(new MemoryStream(cachedReport));
+        }
+
         var salesReport = (List<SalesReport>)await salesRepository.GetAllAsync();
         List<SalesReportDto> salesFile = MapSalesReportToDto(salesReport);
+
         MemoryStream reportStream = fileProcessing.GenerateExcelFile(salesFile, cancellationToken);
+        byte[] reportBytes = reportStream.ToArray();
+        await cacheService.SetAsync(cacheKey, reportBytes);
         await bus.Publish(new SalesReport(), cancellationToken);
         return Result.Success(reportStream);
     }

@@ -32,15 +32,21 @@ public class SalesReportSeeder : ISeeder<ReportDbContext>
             context.SalesReports.Add(salesReport);
             await context.SaveChangesAsync();
 
-            SaleDetail[] saleDetails =
-            [
-                new() { ProductName = "Producto A", Quantity = 2, UnitPrice = 50.00m, SalesReportId = salesReport.Id },
-                new() { ProductName = "Producto B", Quantity = 3, UnitPrice = 75.00m, SalesReportId = salesReport.Id },
-                new() { ProductName = "Producto C", Quantity = 1, UnitPrice = 150.00m, SalesReportId = salesReport.Id }
-            ];
+            for (int i = 0; i < 500; i++)
+            {
+                SaleDetail[] saleDetails =
+                [
+                    new() { ProductName = $"Producto {Guid.NewGuid()}", Quantity = 2, 
+                        UnitPrice = 50.00m, SalesReportId = salesReport.Id },
+                    new() { ProductName = $"Producto {Guid.NewGuid()}", Quantity = 3, 
+                        UnitPrice = 75.00m, SalesReportId = salesReport.Id },
+                    new() { ProductName = $"Producto {Guid.NewGuid()}", Quantity = 1, 
+                        UnitPrice = 150.00m, SalesReportId = salesReport.Id }
+                ];
 
-            context.SaleDetails.AddRange(saleDetails);
-            await context.SaveChangesAsync();
+                context.SaleDetails.AddRange(saleDetails);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
