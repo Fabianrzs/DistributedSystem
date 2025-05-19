@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="ClosedXML" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\commons\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Reports.Application\Reports.Application.csproj" />
   </ItemGroup>

@@ -6,6 +6,8 @@ using MassTransit;
 using Notifications.Application;
 using Notifications.Application.IntegrationEvents;
 using Notifications.Infrastructure;
+using Reports.Application;
+using Reports.Infrastructure;
 using WebApi;
 
 
@@ -36,10 +38,12 @@ services.AddMassTransit(x =>
 services
     .AddInfrastructure(configuration)
     .AddInfrastructureAuth(configuration)
+    .AddInfrastructureReport(configuration)
     .AddInfrastructureNotifi();
 
 services.AddApplication()
     .AddApplicationAuth()
+    .AddApplicationReport()
     .AddApplicationNotifi();
 
 services.AddPresentation(configuration);
