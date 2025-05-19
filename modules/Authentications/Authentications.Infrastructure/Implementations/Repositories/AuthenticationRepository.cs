@@ -33,6 +33,8 @@ public class AuthenticationRepository(AuthenticationDbContext Context, IPassword
             session.IsActive = false;
         }
         Context.Set<Session>().Update(session!);
+        await Context.SaveChangesAsync();
+
     }
 
     public async Task<bool> CheckSessionAsync(Guid userId, Guid sessionId)
@@ -45,6 +47,7 @@ public class AuthenticationRepository(AuthenticationDbContext Context, IPassword
     {
         user.Password = passwordHasher.HashPassword(user.Password);
         await Context.Set<User>().AddAsync(user);
+        await Context.SaveChangesAsync();
         return user;
     }
 
@@ -66,6 +69,7 @@ public class AuthenticationRepository(AuthenticationDbContext Context, IPassword
 
         var session = new Session() { UserId = userId };
         await Context.Set<Session>().AddAsync(session);
+        await Context.SaveChangesAsync();
         return session;
     }
 }
