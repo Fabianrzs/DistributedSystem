@@ -1,10 +1,12 @@
 ﻿using Authentications.Application.Authentications.Dtos;
+using Domain.Events;
+using MassTransit;
 
 namespace Authentications.Application.Authentications.SignUp;
 
 internal sealed class SignUpCommandHandler(
     IAuthenticationRepository authRepository,
-    ITokenProvider tokenProvider)
+    ITokenProvider tokenProvider, IBus messagePublisher)
     : ICommandHandler<SignUpCommand, UserResultDto>
 {
     public async Task<Result<UserResultDto>> Handle(SignUpCommand request, CancellationToken cancellationToken)
@@ -31,6 +33,8 @@ internal sealed class SignUpCommandHandler(
         {
             return Result.Failure<UserResultDto>(AuthenticationErrors.GenerateTokenInvalid());
         }
+
+        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken);
 
         return new UserResultDto(
             session.Id,

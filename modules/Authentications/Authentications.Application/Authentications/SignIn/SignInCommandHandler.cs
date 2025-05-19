@@ -1,8 +1,11 @@
 ﻿using Authentications.Application.Authentications.Dtos;
+using Domain.Events;
+using MassTransit;
 
 namespace Authentications.Application.Authentications.SignIn;
 
-internal sealed class SignInCommandHandler(IAuthenticationRepository authRepository, ITokenProvider tokenProvider)
+internal sealed class SignInCommandHandler(IAuthenticationRepository authRepository, 
+    ITokenProvider tokenProvider, IBus messagePublisher)
     : ICommandHandler<SignInCommand, UserResultDto>
 {
     public async Task<Result<UserResultDto>> Handle(SignInCommand request, CancellationToken cancellationToken)
@@ -14,6 +17,9 @@ internal sealed class SignInCommandHandler(IAuthenticationRepository authReposit
         }
 
         UserDto userResult = user.Adapt<UserDto>();
+
+        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken);
+
         Session session = await authRepository.CreateSessionAsync(user.Id);
 
         string accessToken = tokenProvider.GenerateAccessToken(session.Id, userResult);
@@ -24,6 +30,7 @@ internal sealed class SignInCommandHandler(IAuthenticationRepository authReposit
         {
             return Result.Failure<UserResultDto>(AuthenticationErrors.GenerateTokenInvalid());
         }
+        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken: cancellationToken);
 
         return new UserResultDto(
             session.Id,
