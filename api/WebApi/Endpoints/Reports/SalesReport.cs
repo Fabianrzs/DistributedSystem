@@ -11,14 +11,15 @@ public class SalesReport : IEndpoint
             [FromServices] ISender sender, CancellationToken cancellationToken) =>
         {
             var command = new SalesCommand();
-            Result<IFormFile> result = await sender.Send(command, cancellationToken);
+            Result<MemoryStream> result = await sender.Send(command, cancellationToken);
 
             return result.Match(
-                file => Results.File(file.OpenReadStream(), file.ContentType, file.FileName),
+                reportStream => Results.File(reportStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        $"sales_report_{DateTimeOffset.UtcNow:yyyyMMddHHmmss}.xlsx"),
                 CustomResults.Problem);
         })
-        .WithTags(Tags.Reports)
-        .DisableAntiforgery()
-        .RequireAuthorization();
+            .WithTags(Tags.Reports)
+            .DisableAntiforgery()
+            .RequireAuthorization();
     }
 }

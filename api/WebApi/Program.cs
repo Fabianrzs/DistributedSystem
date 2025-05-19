@@ -2,12 +2,16 @@ using Application;
 using Authentications.Application;
 using Authentications.Infrastructure;
 using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Implementations.Persistence.Seeders;
 using MassTransit;
 using Notifications.Application;
 using Notifications.Application.IntegrationEvents;
 using Notifications.Infrastructure;
 using Reports.Application;
 using Reports.Infrastructure;
+using Reports.Infrastructure.Implementations.Persistence.EFCore;
+using Reports.Infrastructure.Implementations.Persistence.Seeder;
 using WebApi;
 
 
@@ -34,7 +38,6 @@ services.AddMassTransit(x =>
     });
 });
 
-
 services
     .AddInfrastructure(configuration)
     .AddInfrastructureAuth(configuration)
@@ -52,6 +55,17 @@ services.AddPresentation(configuration);
 WebApplication app = builder.Build();
 
 app.UsePresentation(configuration);
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    IServiceProvider serviceProvider = scope.ServiceProvider;
+
+    List<ISeeder<ReportDbContext>> seeders = [
+        new SalesReportSeeder()
+        ];
+
+    await serviceProvider.RunSeedersAsync(seeders);
+}
 
 await app.RunAsync();
 public partial class Program;

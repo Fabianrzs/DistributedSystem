@@ -2,7 +2,6 @@
 using Infrastructure.Implementations.Persistence.Seeders;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using TryAdminBack.Infrastructure.Implementations.Persistence.Seeders;
 
 namespace Infrastructure.Extensions;
 

@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Implementations.Persistence.EFCore.Contexts;
-using TryAdminBack.Infrastructure.Implementations.Persistence.Seeders;
 
 namespace Infrastructure.Implementations.Persistence.Seeders;
 

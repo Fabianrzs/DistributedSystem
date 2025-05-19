@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace TryAdminBack.Infrastructure.Implementations.Persistence.Seeders;
+namespace Infrastructure.Implementations.Persistence.Seeders;
 
 public interface ISeeder<in TDbContext> where TDbContext : DbContext
 {
