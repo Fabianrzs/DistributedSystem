@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿namespace Reports.Application.Reports.Sales;
 
-namespace Reports.Application.Reports.Sales;
-
-public sealed record SalesCommand() : ICommand<IFormFile>;
+public sealed record SalesCommand() : ICommand<MemoryStream>;

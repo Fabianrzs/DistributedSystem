@@ -9,4 +9,18 @@ public class ReportDbContext(DbContextOptions<ReportDbContext> options) : Applic
     public DbSet<SalesReport> SalesReports { get; set; }
     public DbSet<CustomerInfo> Customers { get; set; }
     public DbSet<SaleDetail> SaleDetails { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<SalesReport>()
+            .HasMany(r => r.SalesDetails)
+            .WithOne(d => d.SalesReport)
+            .HasForeignKey(d => d.SalesReportId);
+
+        modelBuilder.Entity<SalesReport>()
+            .HasOne(r => r.Customer)
+            .WithMany()
+            .HasForeignKey(r => r.CustomerInfoId);
+    }
 }

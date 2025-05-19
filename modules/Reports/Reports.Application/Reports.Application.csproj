@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\commons\Application\Application.csproj" />
     <ProjectReference Include="..\Reports.Domain\Reports.Domain.csproj" />
   </ItemGroup>

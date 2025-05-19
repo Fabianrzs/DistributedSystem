@@ -17,7 +17,7 @@ public static class PersistenceExtension
         {
             options.UseSqlServer(authConnection, sqlOptions =>
             {
-                sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory_AuthDb");
+                sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory_ReportsDb");
                 sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                
             });

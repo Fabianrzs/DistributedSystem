@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Reflection;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Reports.Application.Abstractions.FileProcessor;
 using Reports.Domain.Attributes.Excel;
 
@@ -49,7 +48,7 @@ public class FileProcessingService : IFileProcessingService
         return entities;
     }
 
-    public IFormFile GenerateExcelFile<TModel>(List<TModel> data, CancellationToken cancellationToken) where TModel : class, new()
+    public MemoryStream GenerateExcelFile<TModel>(List<TModel> data, CancellationToken cancellationToken) where TModel : class, new()
     {
         using var workbook = new XLWorkbook();
         IXLWorksheet worksheet = workbook.Worksheets.Add("Data");
@@ -82,12 +81,7 @@ public class FileProcessingService : IFileProcessingService
         var stream = new MemoryStream();
         workbook.SaveAs(stream);
         stream.Position = 0;
-
-        return new FormFile(stream, 0, stream.Length, "excel", $"reports_{DateTimeOffset.UtcNow:yyyyMMddHHmmss}.xlsx")
-        {
-            Headers = new HeaderDictionary(),
-            ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        };
+        return stream;
     }
 
     #region Private Methods
