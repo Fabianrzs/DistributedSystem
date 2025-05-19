@@ -1,18 +1,8 @@
 {
   "users": [
     {
-      "name": "reservar_notification_user",
-      "password": "password_notificacion",
-      "tags": "management"
-    },
-    {
-      "name": "reservar_authentication_user",
-      "password": "password_autenticacion",
-      "tags": "management"
-    },
-    {
-      "name": "reservar_booking_user",
-      "password": "password_booking",
+      "name": "distrib",
+      "password": "password_distrib",
       "tags": "management"
     }
   ],
@@ -23,21 +13,7 @@
   ],
   "permissions": [
     {
-      "user": "reservar_notification_user",
-      "vhost": "/",
-      "configure": ".*",
-      "write": ".*",
-      "read": ".*"
-    },
-    {
-      "user": "reservar_authentication_user",
-      "vhost": "/",
-      "configure": ".*",
-      "write": ".*",
-      "read": ".*"
-    },
-    {
-      "user": "reservar_booking_user",
+      "user": "distrib",
       "vhost": "/",
       "configure": ".*",
       "write": ".*",

@@ -1,10 +1,8 @@
-version: '3.7'
-
 services:
-  
-  reservar-sql:
+
+  distrib-sql:
     image: mcr.microsoft.com/mssql/server
-    hostname: reservar-server-sql
+    hostname: distrib-server-sql
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "!1PasswordBackEnd."
@@ -12,63 +10,40 @@ services:
     ports:
       - "1433:1433"
     networks:
-      - reservar-network
-      
-  reservar-rabbit:
-      image: rabbitmq:3.8.34-management-alpine
-      hostname: reservar-server-rabbit
-      ports:
-        - "5672:5672"
-        - "15672:15672"
-      networks:
-        - reservar-network
-      volumes: 
-          - ./tools/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-          - ./tools/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
-          - ./tools/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
-  
-  #Services    
+      - distrib-network
 
-  reservar-front:
-    image: fabianrzs/reservar-frontend:latest
-    hostname: frontend-host
+  distrib-rabbit:
+    image: rabbitmq:3-management
+    hostname: distrib-server-rabbit
     ports:
-      - "4200:4200"
+      - "5672:5672"
+      - "15672:15672"
     networks:
-     - reservar-network
+      - distrib-network
+    volumes:
+      - ./tools/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
 
-  reservar-gateway:
-      image: fabianrzs/reservar-apigateway:latest
-      hostname: gateway-host
-      ports:
-        - "5272:80"
-      networks:
-        - reservar-network
-      depends_on:
-        - reservar-authentication
-        
-  reservar-booking:
-    image: fabianrzs/reservar-booking:latest
-    hostname: booking-host
+  distrib-mongo:
+    image: mongo:6.0
+    hostname: distrib-server-mongo
+    container_name: distrib-mongo
     ports:
-     - "55394:80"
+      - "27017:27017"
     networks:
-    - reservar-network    
-    depends_on:
-      - reservar-sql
+      - distrib-network
+    volumes:
+      - ./tools/mongo:/data/db
 
-  reservar-authentication:
-    image: fabianrzs/reservar-authentication:latest
-    hostname: authentication-host
+  distrib-redis:
+    image: redis:7.0-alpine
+    hostname: distrib-server-redis
+    container_name: distrib-redis
     ports:
-      - "55390:80"
+      - "6379:6379"
     networks:
-      - reservar-network
-    depends_on:
-      - reservar-sql
+      - distrib-network
 
 networks:
-  reservar-network:
+  distrib-network:
     internal: true
     external: true
-      
