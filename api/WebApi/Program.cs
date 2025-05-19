@@ -18,17 +18,17 @@ IConfigurationManager configuration = builder.Configuration;
 services.AddMassTransit(x =>
 {
     // Registrar los consumidores para los eventos que escucharán
-    x.AddConsumer<UserSingUpConsumer>();
-    x.AddConsumer<UserSingInConsumer>();
+    x.AddConsumer<UserSignUpConsumer>();
+    x.AddConsumer<UserSignInConsumer>();
 
     // Configurar RabbitMQ
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq://localhost");  
 
-        cfg.ReceiveEndpoint("user-signup-queue", e => e.ConfigureConsumer<UserSingUpConsumer>(context));
+        cfg.ReceiveEndpoint("user-signup-queue", e => e.ConfigureConsumer<UserSignUpConsumer>(context));
 
-        cfg.ReceiveEndpoint("user-signin-queue", e => e.ConfigureConsumer<UserSingInConsumer>(context));
+        cfg.ReceiveEndpoint("user-signin-queue", e => e.ConfigureConsumer<UserSignInConsumer>(context));
     });
 });
 
@@ -36,7 +36,7 @@ services.AddMassTransit(x =>
 services
     .AddInfrastructure(configuration)
     .AddInfrastructureAuth(configuration)
-    .AddInfrastructureNotifi(configuration);
+    .AddInfrastructureNotifi();
 
 services.AddApplication()
     .AddApplicationAuth()

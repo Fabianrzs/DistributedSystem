@@ -18,8 +18,6 @@ internal sealed class SignInCommandHandler(IAuthenticationRepository authReposit
 
         UserDto userResult = user.Adapt<UserDto>();
 
-        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken);
-
         Session session = await authRepository.CreateSessionAsync(user.Id);
 
         string accessToken = tokenProvider.GenerateAccessToken(session.Id, userResult);
@@ -30,7 +28,9 @@ internal sealed class SignInCommandHandler(IAuthenticationRepository authReposit
         {
             return Result.Failure<UserResultDto>(AuthenticationErrors.GenerateTokenInvalid());
         }
-        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken: cancellationToken);
+
+        await messagePublisher.Publish(new UserSignInEvent(user.Id, user.Email,
+            $"{user.FirstName} {user.LastName}"), cancellationToken: cancellationToken);
 
         return new UserResultDto(
             session.Id,

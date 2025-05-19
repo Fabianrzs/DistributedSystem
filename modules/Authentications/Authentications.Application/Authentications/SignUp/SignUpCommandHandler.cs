@@ -34,7 +34,8 @@ internal sealed class SignUpCommandHandler(
             return Result.Failure<UserResultDto>(AuthenticationErrors.GenerateTokenInvalid());
         }
 
-        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email), cancellationToken);
+        await messagePublisher.Publish(new UserSignUpEvent(user.Id, user.Email, 
+            $"{user.FirstName} {user.LastName}"), cancellationToken);
 
         return new UserResultDto(
             session.Id,
