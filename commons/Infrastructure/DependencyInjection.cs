@@ -1,4 +1,6 @@
-﻿using Infrastructure.Extensions;
+﻿using Application.Abstractions.Dispachers;
+using Infrastructure.Extensions;
+using Infrastructure.Implementations.Dispachers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddRepositories(configuration);
         services.AddAuthenticationUser();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         return services;
     }
 }

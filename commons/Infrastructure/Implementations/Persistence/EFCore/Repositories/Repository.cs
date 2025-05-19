@@ -42,17 +42,20 @@ public class Repository<TEntity>(ApplicationsDbContext context) : IRepository<TE
         
         context.Attach(entities);
         context.Set<TEntity>().UpdateRange(entities);
+        await context.SaveChangesAsync();
     }
 
     public virtual async Task AddAsync(TEntity entity)
     {
         await context.Set<TEntity>().AddAsync(entity);
+        await context.SaveChangesAsync();
+
     }
 
     public virtual async Task UpdateAsync(TEntity entity)
     {
         context.Set<TEntity>().Update(entity);
-        await Task.CompletedTask;
+        await context.SaveChangesAsync();
     }
 
     public virtual async Task DeleteAsync(Guid id)
@@ -65,7 +68,7 @@ public class Repository<TEntity>(ApplicationsDbContext context) : IRepository<TE
         entity.InActive();
         context.Attach(entity);
         context.Set<TEntity>().Update(entity);
-
+        await context.SaveChangesAsync();
     }
 
     #endregion
