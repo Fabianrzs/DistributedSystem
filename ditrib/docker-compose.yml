@@ -1,5 +1,20 @@
 services:
-
+  webapi:
+      build:
+        context: ./..
+        dockerfile: api/WebApi/Dockerfile
+      container_name: distrib-webapi
+      ports:
+        - "5000:80"  # Exponer el puerto 5000 en el host
+      environment:
+        ASPNETCORE_ENVIRONMENT: "Production"  # Puedes cambiar a "Production" si lo deseas
+      networks:
+        - distrib-network
+      depends_on:
+        - distrib-sql
+        - distrib-rabbit
+        - distrib-mongo
+        - distrib-redis
   distrib-sql:
     image: mcr.microsoft.com/mssql/server
     hostname: distrib-server-sql
@@ -11,6 +26,7 @@ services:
       - "1433:1433"
     networks:
       - distrib-network
+
 
   distrib-rabbit:
     image: rabbitmq:3-management

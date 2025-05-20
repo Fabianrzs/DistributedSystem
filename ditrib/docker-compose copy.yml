@@ -23,6 +23,8 @@ services:
       networks:
         - reservar-network
       volumes: 
+          - ./tools/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+          - ./tools/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
           - ./tools/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
   
   #Services    
