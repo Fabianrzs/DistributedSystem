@@ -20,6 +20,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
 IConfigurationManager configuration = builder.Configuration;
 
+string rabbitMqConnectionString = builder.Configuration.GetValue<string>("ConnectionStrings:RabbitConnection");
 
 services.AddMassTransit(x =>
 {
@@ -30,11 +31,13 @@ services.AddMassTransit(x =>
     // Configurar RabbitMQ
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq://localhost");  
+        cfg.Host(rabbitMqConnectionString);  
 
-        cfg.ReceiveEndpoint("user-signup-queue", e => e.ConfigureConsumer<UserSignUpConsumer>(context));
+        cfg.ReceiveEndpoint("user-signup-queue", 
+            e => e.ConfigureConsumer<UserSignUpConsumer>(context));
 
-        cfg.ReceiveEndpoint("user-signin-queue", e => e.ConfigureConsumer<UserSignInConsumer>(context));
+        cfg.ReceiveEndpoint("user-signin-queue", 
+            e => e.ConfigureConsumer<UserSignInConsumer>(context));
     });
 });
 

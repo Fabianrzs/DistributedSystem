@@ -12,8 +12,8 @@ using Reports.Infrastructure.Implementations.Persistence.EFCore;
 namespace Reports.Infrastructure.Migrations
 {
     [DbContext(typeof(ReportDbContext))]
-    [Migration("20250519205953_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250520122410_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,7 +71,8 @@ namespace Reports.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 

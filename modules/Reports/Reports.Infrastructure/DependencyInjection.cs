@@ -11,9 +11,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureReport(this IServiceCollection services, IConfiguration configuration)
     {
+        string redisConnectionString = configuration.GetConnectionString("RedisConnection");
+
         services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
-            var configuration = ConfigurationOptions.Parse("localhost:6379");
+            var configuration = ConfigurationOptions.Parse(redisConnectionString!);
             configuration.AbortOnConnectFail = false;
             return ConnectionMultiplexer.Connect(configuration);
         });

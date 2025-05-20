@@ -11,11 +11,11 @@ public static class PersistenceExtension
     public static IServiceCollection AddPersistenceReport(this IServiceCollection services, IConfiguration configuration)
     {
 
-        string authConnection = configuration.GetConnectionString("ReportConnection");
+        string reportConnection = configuration.GetConnectionString("ReportConnection");
 
         services.AddDbContextFactory<ReportDbContext>(options =>
         {
-            options.UseSqlServer(authConnection, sqlOptions =>
+            options.UseSqlServer(reportConnection, sqlOptions =>
             {
                 sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory_ReportsDb");
                 sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);

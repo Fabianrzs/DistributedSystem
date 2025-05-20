@@ -22,5 +22,9 @@ public class ReportDbContext(DbContextOptions<ReportDbContext> options) : Applic
             .HasOne(r => r.Customer)
             .WithMany()
             .HasForeignKey(r => r.CustomerInfoId);
+
+        modelBuilder.Entity<SaleDetail>()
+            .Property(s => s.UnitPrice)
+            .HasPrecision(18, 4);
     }
 }
